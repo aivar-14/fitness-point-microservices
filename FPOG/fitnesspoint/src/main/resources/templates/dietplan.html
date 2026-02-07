@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weekly Diet Plan</title>
+  <link rel="stylesheet" th:href="@{/css/styling.css}">
+</head>
+<body>
+  <h1>Weekly Diet Plan</h1>
+  
+  <!-- BMI Information Display -->
+  <div th:if="${bmiBasedRecommendation}" class="bmi-info-container" style="background-color: #e8f5e8; padding: 15px; border-radius: 10px; margin: 15px 0; border-left: 5px solid #10b981;">
+    <h3 style="color: #065f46; margin-bottom: 10px;">🎯 BMI-Based Recommendation</h3>
+    <p><strong>Your BMI:</strong> <span th:text="${bmiValue}" style="color: #6366f1; font-weight: bold;"></span></p>
+    <p><strong>Category:</strong> <span th:text="${bmiCategory}" style="color: #10b981; font-weight: bold;"></span></p>
+    <p style="font-style: italic; color: #374151;">Diet plans have been personalized based on your BMI category.</p>
+    
+    <!-- Workout Button -->
+    <div style="margin-top: 15px; text-align: center;">
+      <a th:href="@{/workout}" style="display: inline-block; background-color: #10b981; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; transition: background-color 0.3s ease;">
+        🏋️ Start Workout Session
+      </a>
+    </div>
+  </div>
+  
+  <script th:inline="javascript">
+    /*<![CDATA[*/
+    window.currentUserId = [[${userId}]];
+    window.bmiCategory = [[${bmiCategory}]];
+    window.bmiValue = [[${bmiValue}]];
+    /*]]>*/
+  </script>
+
+  <div th:if="${error}" class="error-message" style="color: red; background-color: #ffe6e6; padding: 10px; border-radius: 5px; margin: 10px 0;">
+    <strong>Error:</strong> <span th:text="${error}"></span>
+  </div>
+
+  <div th:if="${plans}">
+    <h2>Your Diet Plans</h2>
+    <ul>
+      <li th:each="plan : ${plans}">
+        <span th:text="${plan.day}"></span>: <span th:text="${plan.meal}"></span>
+        <button th:attr="onclick=|markDietCompleted(${plan.id},${userId})|">✔️ Completed</button>
+      </li>
+    </ul>
+  </div>
+  <h2>Get your personalized meal plan</h2>
+
+  <!-- Form triggers JS with hardcoded data -->
+  <div class="input-container">
+    <form onsubmit="event.preventDefault(); generatePlan();">
+      <input type="number" id="ageInput" name="age" placeholder="Enter your age" required>
+      <select id="dietType" name="type" required>
+        <option value="veg">Vegetarian</option>
+        <option value="nonveg">Non-Vegetarian</option>
+      </select>
+      <button type="submit">Get Plan</button>
+    </form>
+  </div>
+
+  <!-- Diet plan rendered by JavaScript -->
+  <div id="dietPlan" class="plan"></div>
+
+  <!-- ✅ Keep your JS exactly as you had it -->
+  <script src="/js/dietplan.js"></script>
+</body>
+</html>

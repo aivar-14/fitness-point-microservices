@@ -1,0 +1,8 @@
+com\example\workout_service\model\WorkoutSession.class
+com\example\workout_service\controller\WorkoutController$WorkoutSessionRequest.class
+com\example\workout_service\model\Workout.class
+com\example\workout_service\repository\WorkoutRepository.class
+com\example\workout_service\WorkoutServiceApplication.class
+com\example\workout_service\repository\WorkoutSessionRepository.class
+com\example\workout_service\config\SecurityConfig.class
+com\example\workout_service\controller\WorkoutController.class

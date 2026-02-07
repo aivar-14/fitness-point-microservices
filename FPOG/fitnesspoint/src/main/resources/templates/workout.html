@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workout Timer & Calorie Tracker</title>
+
+  <link rel="stylesheet" th:href="@{/css/styled.css}">
+</head>
+<body>
+  <h1>Workout Timer & Calorie Tracker</h1>
+  <script th:inline="javascript">
+    /*<![CDATA[*/
+    window.currentUserId = [[${userId}]];
+    /*]]>*/
+  </script>
+
+  <div>
+    <input type="number" id="weight" placeholder="Enter weight (kg)">
+    <select id="workout">
+      <option value="" disabled selected>Select Workout</option>
+      <option value="running">Running</option>
+      <option value="cycling">Cycling</option>
+      <option value="yoga">Yoga</option>
+      <option value="weightlifting">Weightlifting</option>
+      <option value="hiit">HIIT</option>
+    </select>
+    <br>
+    <button onclick="showTimer()">Start Workout Setup</button>
+    <a th:href="@{/}" style="display: inline-block; padding: 12px 25px; margin: 10px 8px; border-radius: 30px; border: none; cursor: pointer; font-size: 16px; font-weight: 600; background: #6c63ff; color: white; transition: all 0.3s ease; text-decoration: none;">
+      🏠 Go to Home
+    </a>
+  </div>
+
+  <div id="timer-section" style="display:none;">
+    <div class="timer-circle" id="display">00:00</div>
+    <div class="controls">
+      <button onclick="startTimer()">Start</button>
+      <button onclick="stopTimer()">Stop</button>
+      <button onclick="resetTimer()">Reset</button>
+    </div>
+    <div class="result" id="result"></div>
+  </div>
+
+  <!-- ✅ external JS -->
+  <script th:src="@{/js/workout.js}"></script>
+</body>
+</html>

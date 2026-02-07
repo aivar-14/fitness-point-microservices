@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BMI Calculator - Fitness Point</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-image: url('/assets/image.png');
+      background-size: cover;
+      background-position: center;
+      filter: blur(8px);
+      z-index: -1;
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+      background: linear-gradient(90deg, #a855f7, #6366f1);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      color: #4b5563;
+      margin-bottom: 30px;
+    }
+
+    .bmi-form {
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      margin-bottom: 30px;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    input {
+      flex: 1;
+      padding: 15px;
+      border: 2px solid #6366f1;
+      border-radius: 10px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #a855f7;
+      box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+    }
+
+    .buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 12px 30px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .calculate-btn {
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      color: white;
+    }
+
+    .calculate-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(168, 85, 247, 0.3);
+    }
+
+    .reset-btn {
+      background: #f3f4f6;
+      color: #374151;
+    }
+
+    .reset-btn:hover {
+      background: #e5e7eb;
+    }
+
+    .result-container {
+      background: white;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .result-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 15px;
+    }
+
+    .result-value {
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #6366f1, #a855f7);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+    }
+
+    .result-category {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #10b981;
+    }
+
+    .diet-plan-btn {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      text-decoration: none;
+      display: inline-block;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+    }
+
+    .diet-plan-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+      text-decoration: none;
+      color: white;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px;
+        margin: 20px;
+      }
+      
+      .input-group {
+        flex-direction: column;
+      }
+      
+      .buttons {
+        flex-direction: column;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>BMI Calculator</h1>
+    <p class="subtitle">Know Your Health Score - Check if your weight is in a healthy range!</p>
+
+    <div class="bmi-form">
+      <form th:action="@{/bmi/calculate}" method="post" id="bmiForm">
+        <div class="input-group">
+          <input type="number" id="height" name="heightCm" placeholder="Height (cm)" required min="50" max="300">
+          <input type="number" id="weight" name="weightKg" placeholder="Weight (kg)" required min="10" max="500">
+        </div>
+        
+        <div class="buttons">
+          <button type="submit" class="btn calculate-btn">Calculate BMI</button>
+          <button type="reset" class="btn reset-btn">Reset</button>
+        </div>
+      </form>
+    </div>
+
+    <div th:if="${result != null}" class="result-container">
+      <h3 class="result-title">Your BMI Result</h3>
+      <div class="result-value" th:text="'BMI: ' + ${result.bmiValue}"></div>
+      <div class="result-category" th:text="'Category: ' + ${result.category}"></div>
+      
+      <!-- Diet Plan Button -->
+      <div style="margin-top: 20px;">
+        <a th:href="@{/diet(bmiCategory=${result.category}, bmiValue=${result.bmiValue})}" 
+           class="btn diet-plan-btn">
+          🍽️ Show Diet Plans Based on Your BMI
+        </a>
+      </div>
+    </div>
+    
+    <!-- Go to Home Button at bottom of container -->
+    <div style="text-align: center; margin-top: 30px;">
+      <a th:href="@{/}" style="display: inline-block; padding: 12px 25px; margin: 10px 8px; border-radius: 30px; border: none; cursor: pointer; font-size: 16px; font-weight: 600; background: #6c63ff; color: white; transition: all 0.3s ease; text-decoration: none;">
+        🏠 Go to Home
+      </a>
+    </div>
+  </div>
+</body>
+</html>
